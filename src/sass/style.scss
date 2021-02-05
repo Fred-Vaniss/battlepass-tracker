@@ -55,8 +55,13 @@ h1 {
     box-shadow: inset 0 0 15px rgb(0, 0, 0);
   }
   &.bar{
-    background-color: green;
+    background: rgb(25,199,18);
+    background: linear-gradient(0deg, #068c00 0%, #0aff00 100%);
     width: 50%;
+    &.late{
+      background: rgb(199,18,18);
+      background: linear-gradient(0deg, #940000 0%, #ff0404 100%);
+    }
   }
 }
 
@@ -65,8 +70,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   position: absolute;
-  transform: translate(-26px, -26px);
-  left: 26px;
+  transform: translate(-36px, -26px);
   width: 70px;
   span{
     margin-bottom: 10px;

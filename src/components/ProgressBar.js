@@ -29,7 +29,7 @@ const ProgressBar = props => {
           <span>{timeLeft} jours</span>
           <div className="measure"></div>
         </div>
-        <div className="progress bar" style={{width: levelPcnt+"%"}}></div>
+        <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : "early"}`} style={{width: levelPcnt+"%"}}></div>
       </div>
       <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
     </div>

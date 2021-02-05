@@ -21,8 +21,19 @@ body {
 }
 
 h1 {
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 1em;
+  text-align: center;
+}
+h2 {
   font-size: 2em;
   font-weight: bold;
+  margin-bottom: 1em;
+}
+
+button{
+  font-size: 1.3em;
 }
 
 .container{
@@ -79,5 +90,50 @@ h1 {
     height:40px;
     width:2px;
     background-color: #fff;
+  }
+}
+
+.add-container{
+  display: flex;
+  justify-content: center;
+}
+
+.modal-overlay{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+
+  position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,.7);
+	z-index: 1000
+}
+
+.modal{
+  width: 380px;
+  background-color: #444;
+  border-radius: 10px;
+  padding: 2em;
+
+  .form-table{
+    margin: 0 auto 12px auto;
+    label{
+      margin-right: 1em;
+    }
+    input{
+      width: 150px;
+    }
+    tr{
+      height: 2em;
+    }
+  }
+
+  .buttons-container{
+    display: flex;
+    justify-content: space-evenly;
   }
 }

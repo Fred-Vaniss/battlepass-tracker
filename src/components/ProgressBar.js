@@ -3,9 +3,9 @@ import React from 'react'
 const ProgressBar = props => {
 
   const dates = {
-    start: new Date("02/03/2021"),
+    start: new Date(props.start),
     current: new Date(),
-    end: new Date("05/04/2021")
+    end: new Date(props.end)
   }
 
   let timeLeft = Math.round((dates.end - dates.current) / (1000 * 3600 * 24))
@@ -13,8 +13,12 @@ const ProgressBar = props => {
 
   let level = props.level
 
-  let levelPcnt = level/110*100
-  let daysPcnt = (timeElapsed/90*100)
+  const clamp = (num, min, max) => {
+    return num <= min ? min : num >= max ? max : num;
+  }
+
+  let levelPcnt = clamp(level/110*100,0,100)
+  let daysPcnt = clamp(timeElapsed/90*100,0,100)
 
 
   console.log(timeElapsed)
@@ -22,17 +26,26 @@ const ProgressBar = props => {
   console.log(dates)
 
   return (
-    <div className="progress-container">
-      <span className="dates">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
-      <div className="progress bg">
-        <div className="progress-days" style={{left: daysPcnt+"%"}}>
-          <span>{timeLeft} jours</span>
-          <div className="measure"></div>
-        </div>
-        <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : "early"}`} style={{width: levelPcnt+"%"}}></div>
+    <>
+      <div className="level-form">
+          <label htmlFor="level">Battlepass level: </label>
+          <input  type="number"
+                  name="level"
+                  value="0"
+                  />
       </div>
-      <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
-    </div>
+      <div className="progress-container">
+        <span className="dates">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
+        <div className="progress bg">
+          <div className="progress-days" style={{left: daysPcnt+"%"}}>
+            <span>{timeLeft} jours</span>
+            <div className="measure"></div>
+          </div>
+          <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : "early"}`} style={{width: levelPcnt+"%"}}></div>
+        </div>
+        <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
+      </div>
+    </>
   )
 }
 

@@ -1,72 +1,57 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom'
 import ProgressBar from './components/ProgressBar';
+import Modal from './components/Modal';
 
-function App() {
-  return (
-    <Router>
-      <Route path="/">
-        <QueryApp/>
-      </Route>
-    </Router>
-  );
-}
-
-
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-}
-
-const QueryApp = () => {
-  const [level,setLevel] = useState(0)
-
-  const setQueryString = (level) => {
-    const newUrl =  window.location.protocol + "//" +
-                    window.location.host +
-                    window.location.pathname +
-                    '?lvl='+level;
-
-    window.history.pushState({ path: newUrl }, "", newUrl);
-  }
-
-  let query = useQuery();
+const App = () => {
+  const [data,setData] = useState([]);
+  const [form,setForm] = useState({
+    name: "",
+    start: "",
+    end: "",
+  });
+  const [modal,setModal] = useState(false);
 
   const firstLoad = useRef(true);
 
   if (firstLoad.current) {
-    const queryLevel = query.get('lvl')
-    if (!queryLevel) {
-      setQueryString(level)
-    } else {
-      setLevel(query.get("lvl"))
-    }
+    
+    // if (!queryLevel) {
+     
+    // } else {
+      
+    // }
     firstLoad.current = false;
   }
 
-  const handleLevelChange = e => {
-    setLevel(e.target.value)
-    setQueryString(level)
+  const handleForm = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    console.log(value)
+
+    setForm({ ...form, [name]: value })
   }
 
+  const listProgresses = data.map((item, index = 0) => {
+    index++
+    return(
+      <ProgressBar/>
+    )
+  })
+
   useEffect(() => {
-    setQueryString(level)
-  }, [level])
+    
+  }, [data])
 
   return (
-    <>
       <div class="container">
         <h1>Battlepass tracker</h1>
-        <div className="level-form">
-          <label htmlFor="level">Battlepass level: </label>
-          <input  type="number"
-                  name="level"
-                  value={level}
-                  onChange={handleLevelChange}/>
+        {listProgresses}
+        <div className="add-container">
+         <button onClick={() => setModal(true)}>Add battlepass</button>
         </div>
-        <ProgressBar level={level}/>
+        <Modal form={form} handleChange={handleForm} open={modal} onClose={() => setModal(false)}/>
       </div>
-    </>
   )
 }
 

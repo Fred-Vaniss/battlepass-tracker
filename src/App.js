@@ -13,6 +13,7 @@ const App = () => {
     goal: 0,
     level: "0"
   });
+  const [isEditing,setIsEditing] = useState(false);
   const [modal,setModal] = useState(false);
 
   const firstLoad = useRef(true);
@@ -35,8 +36,20 @@ const App = () => {
   }
 
   const handleSave = () => {
-    setData(data.concat(form))
-    setIndex(dataIndex+1)
+    if (isEditing === false) {
+      setData(data.concat(form))
+      const newIndex = dataIndex + 1
+      setIndex(newIndex)
+    } else {
+      const modifiedData = data
+      const key = form.id
+      const index = modifiedData.findIndex(i => i.id === key);
+
+      modifiedData[index] = form
+
+      setData(modifiedData)
+      setIsEditing(false)
+    }
     setForm({
       id: dataIndex,
       name: "",
@@ -46,6 +59,23 @@ const App = () => {
       level: "0"
     })
     setModal(false)
+  }
+
+  const startEdit = key => {
+    const index = data.findIndex(i => i.id === key);
+    const editing = data[index]
+    setIsEditing(true)
+
+    setForm({
+      id: editing.id,
+      name: editing.name,
+      start: editing.start,
+      end: editing.end,
+      goal: editing.goal,
+      level: editing.level
+    })
+
+    setModal(true)
   }
 
   const handleLevel = (key, value) => {
@@ -60,11 +90,33 @@ const App = () => {
     setData(modifiedData)
   }
 
+  const deleteEntry = (key) => {
+    const modifiedData = data
+    const index = modifiedData.findIndex(i => i.id === key)
+
+    modifiedData.splice(index, 1)
+
+    setData(modifiedData)
+  }
+
   const listProgresses = data.map((item, index = 0) => {
     return(
-      <ProgressBar key={item.id} data={item} handleChange={handleLevel}/>
+      <ProgressBar key={item.id} data={item} handleChange={handleLevel} editButton={startEdit} deleteButton={deleteEntry}/>
     )
   })
+
+  const closeModal = () => {
+    setModal(false)
+    setIsEditing(false)
+    setForm({
+      id: dataIndex,
+      name: "",
+      start: "",
+      end: "",
+      goal: 0,
+      level: "0"
+    })
+  }
 
   useEffect(() => {
     console.log(data) 
@@ -77,7 +129,7 @@ const App = () => {
         <div className="add-container">
          <button onClick={() => setModal(true)}>Add battlepass</button>
         </div>
-        <Modal form={form} handleChange={handleForm} open={modal} onClose={() => setModal(false)} onSave={handleSave}/>
+        <Modal form={form} handleChange={handleForm} open={modal} onClose={closeModal} onSave={handleSave}/>
       </div>
   )
 }

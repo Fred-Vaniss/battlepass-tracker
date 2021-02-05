@@ -1,16 +1,6 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 
-const DIMMED_BG_STYLES = {
-	position: 'fixed',
-	top: 0,
-	left: 0,
-	right: 0,
-	bottom: 0,
-	backgroundColor: 'rgba(0,0,0,.7)',
-	zIndex: 1000
-}
-
 const Modal = ({form, handleChange, open, onClose, onSave, children}) => {
 	if (!open) return null
 	return ReactDom.createPortal(
@@ -38,7 +28,7 @@ const Modal = ({form, handleChange, open, onClose, onSave, children}) => {
 						</tr>
 					</table>
 
-					<div className="buttons-container">	
+					<div className="modal-buttons-container">	
 						<button onClick={onSave}>Save</button>
 						<button onClick={onClose}>Cancel</button>
 					</div>

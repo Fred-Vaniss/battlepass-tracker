@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 
-const ProgressBar = ({data, handleChange}) => {
+const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
+
+  const [deleted, setDeleted] = useState(false)
 
   const [level, setLevel] = useState(data.level)
 
@@ -10,9 +12,9 @@ const ProgressBar = ({data, handleChange}) => {
     end: new Date(data.end)
   }
 
-  let timeLeft = Math.round((dates.end - dates.current) / (1000 * 3600 * 24))
-  let timeElapsed = Math.round((dates.current - dates.start) / (1000 * 3600 * 24))
-  let passDuration = Math.round((dates.end - dates.start) / (1000 * 3600 * 24))
+  let timeLeft = Math.ceil((dates.end - dates.current) / (1000 * 3600 * 24))
+  let timeElapsed = Math.ceil((dates.current - dates.start) / (1000 * 3600 * 24))
+  let passDuration = Math.ceil((dates.end - dates.start) / (1000 * 3600 * 24))
   let passGoal = data.goal
 
   const clamp = (num, min, max) => {
@@ -31,8 +33,23 @@ const ProgressBar = ({data, handleChange}) => {
     handleChange(id, newLevel)
   }
 
+  const prepareEdit = () => {
+    const id = data.id
+
+    editButton(id)
+  }
+
+  const prepareDelete = () => {
+    const id = data.id
+
+    deleteButton(id)
+    setDeleted(true)
+  }
+
+  if (deleted === true) return null
+
   return (
-    <>
+    <div class="tracker">
       <div className="level-form">
         <h2>{data.name}: </h2>
         <input  type="number"
@@ -40,19 +57,24 @@ const ProgressBar = ({data, handleChange}) => {
                 value={level}
                 onChange={changeLevel}
                 />
+        <h2>/{data.goal}</h2>
+        <div className="buttons-container">
+          <button onClick={prepareDelete}>Delete</button>
+          <button onClick={prepareEdit}>Edit</button>
+        </div>
       </div>
       <div className="progress-container">
-        <span className="dates">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
+        <span className="dates left">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
         <div className="progress bg">
           <div className="progress-days" style={{left: daysPcnt+"%"}}>
             <span>{timeLeft} day(s)</span>
             <div className="measure"></div>
           </div>
-          <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : "early"}`} style={{width: levelPcnt+"%"}}></div>
+          <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : levelPcnt === 100 ? "finished" : ""}`} style={{width: levelPcnt+"%"}}></div>
         </div>
         <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
       </div>
-    </>
+    </div>
   )
 }
 

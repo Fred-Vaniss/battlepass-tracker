@@ -7,13 +7,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(61, 61, 61);
+  background-color: #121212;
   color: white;
   height: 100vh;
 }
 
 #root{
-  height: 100vh;
+  min-height: 100vh;
 
   display:flex;
   justify-content: center;
@@ -34,35 +34,76 @@ h2 {
 
 button{
   font-size: 1.3em;
+  color: #fff;
+  background-color: transparent;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+input{
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgb(133, 133, 133);
+  color: #fff;
 }
 
 .container{
-  width: 800px;
+  width: 900px;
+  padding: 20px 0;
+}
+
+.tracker{
+  background-color: #1e1e1e;
+  margin: 40px 10px;
+  padding: 5px 25px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  border-radius: 8px;
 }
 
 .level-form{
   display: flex;
+  position: relative;
   justify-content: center;
   margin: 20px 0;
   h2{
     margin-bottom: 0em;
   }
-
   input{
     margin-left: 20px;
-    color: #fff;
+    // color: #fff;
     font-size: 2em;
-    background-color: #333;
-    width: 80px;
+    // background-color: #333;
+    border-bottom: 2px solid #fff;
+    width: 70px;
     height: 35px;
   }
+  button{
+    font-size: 2em;
+  }
 } 
+
+.buttons-container{
+  position:absolute;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  font-size: .5em;
+  button{
+    margin-bottom: 8px;
+  }
+}
+
 .progress-container{
   display:flex;
   align-items: center;
   justify-content: space-evenly;
   .dates{
     font-size: 1.3em;
+    width: 130px;
+    &.left{
+      text-align: right;
+    }
   }
 }
 
@@ -71,19 +112,22 @@ button{
   border-radius: 6px;
   &.bg{
     position: relative;
-    background-color: rgb(49, 49, 49);
+    background-color: #2c2c2c;
     width: 70%;
     margin: 20px;
-    box-shadow: inset 0 0 15px rgb(0, 0, 0);
+    box-shadow: inset 0 0 8px rgb(0, 0, 0);
   }
   &.bar{
     background: rgb(25,199,18);
-    background: linear-gradient(0deg, #068c00 0%, #0aff00 100%);
+    background: linear-gradient(0deg, #034600 0%, #08b702 100%);
     width: 50%;
     &.late{
       background: rgb(199,18,18);
-      background: linear-gradient(0deg, #940000 0%, #ff0404 100%);
+      background: linear-gradient(0deg, #500000 0%, #dc0000 100%);
     }
+    &.finished{
+      background: rgb(255,136,0);
+      background: linear-gradient(0deg, rgba(255,136,0,1) 0%, rgba(255,210,2,1) 100%);    }
   }
 }
 
@@ -126,7 +170,8 @@ button{
 
 .modal{
   width: 380px;
-  background-color: #444;
+  background-color: #1e1e1e;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 10px;
   padding: 2em;
 
@@ -134,16 +179,18 @@ button{
     margin: 0 auto 12px auto;
     label{
       margin-right: 1em;
+      font-size: 1.2em;
     }
     input{
       width: 150px;
+      font-size: 1.2em;
     }
     tr{
       height: 2em;
     }
   }
 
-  .buttons-container{
+  .modal-buttons-container{
     display: flex;
     justify-content: space-evenly;
   }

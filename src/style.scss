@@ -1,3 +1,5 @@
+@import 'style_reset';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -6,5 +8,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(82, 82, 82);
+  color: white;
+  height: 100vh;
 }
 
+#root{
+  height: 100vh;
+
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.container{
+  border: 1px solid black;
+  width: 800px;
+}

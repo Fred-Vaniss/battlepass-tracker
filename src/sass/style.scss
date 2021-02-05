@@ -41,9 +41,20 @@ button{
 }
 
 .level-form{
+  display: flex;
+  justify-content: center;
   margin: 20px 0;
+  h2{
+    margin-bottom: 0em;
+  }
+
   input{
-    width: 40px;
+    margin-left: 20px;
+    color: #fff;
+    font-size: 2em;
+    background-color: #333;
+    width: 80px;
+    height: 35px;
   }
 } 
 .progress-container{

@@ -1,44 +1,51 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-const ProgressBar = props => {
+const ProgressBar = ({data, handleChange}) => {
+
+  const [level, setLevel] = useState(data.level)
 
   const dates = {
-    start: new Date(props.start),
+    start: new Date(data.start),
     current: new Date(),
-    end: new Date(props.end)
+    end: new Date(data.end)
   }
 
   let timeLeft = Math.round((dates.end - dates.current) / (1000 * 3600 * 24))
   let timeElapsed = Math.round((dates.current - dates.start) / (1000 * 3600 * 24))
-
-  let level = props.level
+  let passDuration = Math.round((dates.end - dates.start) / (1000 * 3600 * 24))
+  let passGoal = data.goal
 
   const clamp = (num, min, max) => {
     return num <= min ? min : num >= max ? max : num;
   }
 
-  let levelPcnt = clamp(level/110*100,0,100)
-  let daysPcnt = clamp(timeElapsed/90*100,0,100)
+  let levelPcnt = clamp(level/passGoal*100,0,100)
+  let daysPcnt = clamp(timeElapsed/passDuration*100,0,100)
 
+  const changeLevel = e => {
+    const id = data.id
+    const newLevel = e.target.value
+    setLevel(newLevel)
 
-  console.log(timeElapsed)
-
-  console.log(dates)
+    console.log(id)
+    handleChange(id, newLevel)
+  }
 
   return (
     <>
       <div className="level-form">
-          <label htmlFor="level">Battlepass level: </label>
-          <input  type="number"
-                  name="level"
-                  value="0"
-                  />
+        <h2>{data.name}: </h2>
+        <input  type="number"
+                name="level"
+                value={level}
+                onChange={changeLevel}
+                />
       </div>
       <div className="progress-container">
         <span className="dates">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
         <div className="progress bg">
           <div className="progress-days" style={{left: daysPcnt+"%"}}>
-            <span>{timeLeft} jours</span>
+            <span>{timeLeft} day(s)</span>
             <div className="measure"></div>
           </div>
           <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : "early"}`} style={{width: levelPcnt+"%"}}></div>

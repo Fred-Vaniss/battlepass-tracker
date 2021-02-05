@@ -3,11 +3,15 @@ import ProgressBar from './components/ProgressBar';
 import Modal from './components/Modal';
 
 const App = () => {
+  const [dataIndex, setIndex] = useState(1)
   const [data,setData] = useState([]);
   const [form,setForm] = useState({
+    id: dataIndex,
     name: "",
     start: "",
     end: "",
+    goal: 0,
+    level: "0"
   });
   const [modal,setModal] = useState(false);
 
@@ -27,20 +31,43 @@ const App = () => {
     const name = e.target.name;
     const value = e.target.value;
 
-    console.log(value)
-
     setForm({ ...form, [name]: value })
   }
 
+  const handleSave = () => {
+    setData(data.concat(form))
+    setIndex(dataIndex+1)
+    setForm({
+      id: dataIndex,
+      name: "",
+      start: "",
+      end: "",
+      goal: 0,
+      level: "0"
+    })
+    setModal(false)
+  }
+
+  const handleLevel = (key, value) => {
+    console.log(key,value)
+    const modifiedData = data
+    const index = modifiedData.findIndex(i => i.id === key);
+
+    modifiedData[index].level = value
+
+    console.log(modifiedData)
+
+    setData(modifiedData)
+  }
+
   const listProgresses = data.map((item, index = 0) => {
-    index++
     return(
-      <ProgressBar/>
+      <ProgressBar key={item.id} data={item} handleChange={handleLevel}/>
     )
   })
 
   useEffect(() => {
-    
+    console.log(data) 
   }, [data])
 
   return (
@@ -50,7 +77,7 @@ const App = () => {
         <div className="add-container">
          <button onClick={() => setModal(true)}>Add battlepass</button>
         </div>
-        <Modal form={form} handleChange={handleForm} open={modal} onClose={() => setModal(false)}/>
+        <Modal form={form} handleChange={handleForm} open={modal} onClose={() => setModal(false)} onSave={handleSave}/>
       </div>
   )
 }

@@ -11,8 +11,7 @@ const DIMMED_BG_STYLES = {
 	zIndex: 1000
 }
 
-const Modal = ({form, handleChange, open, onClose, children}) => {
-	console.log(open)
+const Modal = ({form, handleChange, open, onClose, onSave, children}) => {
 	if (!open) return null
 	return ReactDom.createPortal(
 		<>
@@ -33,10 +32,14 @@ const Modal = ({form, handleChange, open, onClose, children}) => {
 							<td><label htmlFor="end">End date</label></td>
 							<td><input type="date" name="end" value={form.end} onChange={handleChange}/></td>
 						</tr>
+						<tr>
+							<td><label htmlFor="goal">Level goal</label></td>
+							<td><input type="number" name="goal" value={form.goal} onChange={handleChange}/></td>
+						</tr>
 					</table>
 
 					<div className="buttons-container">	
-						<button>Save</button>
+						<button onClick={onSave}>Save</button>
 						<button onClick={onClose}>Cancel</button>
 					</div>
 				</div>

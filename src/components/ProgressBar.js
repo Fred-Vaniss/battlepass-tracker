@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp, faAngleDown, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 
-const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
+const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton}) => {
 
   const [deleted, setDeleted] = useState(false)
 
@@ -47,6 +47,13 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
     setDeleted(true)
   }
 
+  const prepareMove = e => {
+    const id = data.id
+    const direction = e.currentTarget.getAttribute('data-direction')
+
+    moveButton(id, direction)
+  }
+
   if (deleted === true) return null
 
   return (
@@ -64,8 +71,8 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
           <button onClick={prepareEdit}><FontAwesomeIcon icon={faEdit}/></button>
         </div>
         <div className="buttons-container left">
-          <button><FontAwesomeIcon icon={faAngleUp}/></button>
-          <button><FontAwesomeIcon icon={faAngleDown}/></button>
+          <button data-direction="up" onClick={prepareMove}><FontAwesomeIcon icon={faAngleUp}/></button>
+          <button data-direction="down" onClick={prepareMove}><FontAwesomeIcon icon={faAngleDown}/></button>
         </div>
       </div>
       <div className="progress-container">

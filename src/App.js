@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import ProgressBar from './components/ProgressBar';
 import Modal from './components/Modal';
-import { arrayMove } from 'array-move'
+// import { arrayMove } from 'array-move'
 
 const App = () => {
   const [dataIndex, setIndex] = useState(1)
@@ -107,7 +107,19 @@ const App = () => {
   }
 
   const moveEntry = (key, direction) => {
+    const arrayMove = require('array-move')
+    const modifiedData = data
+    const index = modifiedData.findIndex(i => i.id === key)
+    let newIndex = index 
 
+    if (direction === "up") {
+      newIndex--
+    } else {
+      newIndex++
+    }
+    const movedData = arrayMove(modifiedData, index, newIndex)
+    setData(movedData)
+    setLastChange([index,"moved"])
   }
 
   const listProgresses = data.map((item, index = 0) => {

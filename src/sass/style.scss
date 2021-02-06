@@ -71,9 +71,7 @@ input{
   }
   input{
     margin-left: 20px;
-    // color: #fff;
     font-size: 2em;
-    // background-color: #333;
     border-bottom: 2px solid #fff;
     width: 70px;
     height: 35px;
@@ -145,6 +143,7 @@ input{
     height:40px;
     width:2px;
     background-color: #fff;
+    box-shadow: 0 0 12px #000 , 0 0 6px #000, 0 0 3px #000;
   }
 }
 

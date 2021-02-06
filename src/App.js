@@ -5,8 +5,21 @@ import Modal from './components/Modal';
 const App = () => {
   const [dataIndex, setIndex] = useState(1)
   const [data,setData] = useState([]);
+  const firstLoad = useRef(true);
+
+  if (firstLoad.current) {
+    
+    const storage = JSON.parse(localStorage.getItem("BattlePassTracker"))
+
+    if (storage !== null) {
+      setIndex(storage.index)
+      setData(storage.data)
+    }
+    
+    firstLoad.current = false;
+  }
+
   const [form,setForm] = useState({
-    id: dataIndex,
     name: "",
     start: "",
     end: "",
@@ -15,24 +28,18 @@ const App = () => {
   });
   const [isEditing,setIsEditing] = useState(false);
   const [modal,setModal] = useState(false);
-
-  const firstLoad = useRef(true);
-
-  if (firstLoad.current) {
-    
-    // if (!queryLevel) {
-     
-    // } else {
-      
-    // }
-    firstLoad.current = false;
-  }
+  const [lastChange, setLastChange] = useState([0,0])
 
   const handleForm = e => {
     const name = e.target.name;
     const value = e.target.value;
 
     setForm({ ...form, [name]: value })
+    if (isEditing === false) {
+      setForm((prevState) => ({
+        ...prevState, id: dataIndex
+      }))
+    }
   }
 
   const handleSave = () => {
@@ -49,9 +56,9 @@ const App = () => {
 
       setData(modifiedData)
       setIsEditing(false)
+      setLastChange([key,"edit"])
     }
     setForm({
-      id: dataIndex,
       name: "",
       start: "",
       end: "",
@@ -79,15 +86,13 @@ const App = () => {
   }
 
   const handleLevel = (key, value) => {
-    console.log(key,value)
     const modifiedData = data
     const index = modifiedData.findIndex(i => i.id === key);
 
     modifiedData[index].level = value
 
-    console.log(modifiedData)
-
     setData(modifiedData)
+    setLastChange([index,modifiedData])
   }
 
   const deleteEntry = (key) => {
@@ -97,6 +102,7 @@ const App = () => {
     modifiedData.splice(index, 1)
 
     setData(modifiedData)
+    setLastChange([index,"deletion"])
   }
 
   const listProgresses = data.map((item, index = 0) => {
@@ -109,7 +115,6 @@ const App = () => {
     setModal(false)
     setIsEditing(false)
     setForm({
-      id: dataIndex,
       name: "",
       start: "",
       end: "",
@@ -118,9 +123,19 @@ const App = () => {
     })
   }
 
+  const saveToLocalStorage = () => {
+    const storage = {
+      data: data,
+      index: dataIndex
+    }
+    localStorage.setItem("BattlePassTracker", JSON.stringify(storage))
+  }
+
   useEffect(() => {
-    console.log(data) 
-  }, [data])
+    console.log(data)
+    console.log("useEffect triggered")
+    saveToLocalStorage()
+  }, [data,lastChange])
 
   return (
       <div class="container">
@@ -129,7 +144,7 @@ const App = () => {
         <div className="add-container">
          <button onClick={() => setModal(true)}>Add battlepass</button>
         </div>
-        <Modal form={form} handleChange={handleForm} open={modal} onClose={closeModal} onSave={handleSave}/>
+        <Modal mode={isEditing} form={form} handleChange={handleForm} open={modal} onClose={closeModal} onSave={handleSave}/>
       </div>
   )
 }

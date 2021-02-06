@@ -29,7 +29,6 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
     const newLevel = e.target.value
     setLevel(newLevel)
 
-    console.log(id)
     handleChange(id, newLevel)
   }
 
@@ -50,6 +49,7 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
 
   return (
     <div class="tracker">
+      <span class="id-debug">{`ID: ${data.id}`}</span>
       <div className="level-form">
         <h2>{data.name}: </h2>
         <input  type="number"

@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 
-const Modal = ({form, handleChange, open, onClose, onSave, children}) => {
+const Modal = ({mode, form, handleChange, open, onClose, onSave, children}) => {
 	if (!open) return null
 	return ReactDom.createPortal(
 		<>
 			<div className="modal-overlay">
 				<div className="modal">
-					<h2>New Battle Pass tracking</h2>
+					<h2>{mode === false ? "New Battle Pass tracking" : "Edit Battle Pass Tracking"}</h2>
 
 					<table class="form-table">
 						<tr>

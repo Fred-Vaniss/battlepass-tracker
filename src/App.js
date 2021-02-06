@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import ProgressBar from './components/ProgressBar';
 import Modal from './components/Modal';
+import { arrayMove } from 'array-move'
 
 const App = () => {
   const [dataIndex, setIndex] = useState(1)
@@ -105,9 +106,18 @@ const App = () => {
     setLastChange([index,"deletion"])
   }
 
+  const moveEntry = (key, direction) => {
+
+  }
+
   const listProgresses = data.map((item, index = 0) => {
     return(
-      <ProgressBar key={item.id} data={item} handleChange={handleLevel} editButton={startEdit} deleteButton={deleteEntry}/>
+      <ProgressBar  key={item.id} 
+                    data={item} 
+                    handleChange={handleLevel} 
+                    editButton={startEdit} 
+                    deleteButton={deleteEntry}
+                    moveButton={moveEntry}/>
     )
   })
 
@@ -138,7 +148,7 @@ const App = () => {
   }, [data,lastChange])
 
   return (
-      <div class="container">
+      <div className="container">
         <h1>Battlepass tracker</h1>
         {listProgresses}
         <div className="add-container">

@@ -85,8 +85,17 @@ input{
   position:absolute;
   display: flex;
   flex-direction: column;
-  right: 0;
   font-size: .5em;
+  &.right{
+    right: 0;
+  }
+  &.left{
+    left: 0;
+    button{
+      font-size: 3.2em;
+      padding: 0 12px;
+    }
+  }
   button{
     margin-bottom: 8px;
   }
@@ -176,16 +185,18 @@ input{
 
   .form-table{
     margin: 0 auto 12px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 5px;
     label{
-      margin-right: 1em;
       font-size: 1.2em;
+      justify-self: end;
     }
     input{
       width: 150px;
       font-size: 1.2em;
-    }
-    tr{
-      height: 2em;
+      justify-self: start;
     }
   }
 

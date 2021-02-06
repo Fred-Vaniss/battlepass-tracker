@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleUp, faAngleDown, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
 
@@ -48,8 +50,7 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
   if (deleted === true) return null
 
   return (
-    <div class="tracker">
-      <span class="id-debug">{`ID: ${data.id}`}</span>
+    <div className="tracker">
       <div className="level-form">
         <h2>{data.name}: </h2>
         <input  type="number"
@@ -58,9 +59,13 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton}) => {
                 onChange={changeLevel}
                 />
         <h2>/{data.goal}</h2>
-        <div className="buttons-container">
-          <button onClick={prepareDelete}>Delete</button>
-          <button onClick={prepareEdit}>Edit</button>
+        <div className="buttons-container right">
+          <button onClick={prepareDelete}><FontAwesomeIcon icon={faTrash}/></button>
+          <button onClick={prepareEdit}><FontAwesomeIcon icon={faEdit}/></button>
+        </div>
+        <div className="buttons-container left">
+          <button><FontAwesomeIcon icon={faAngleUp}/></button>
+          <button><FontAwesomeIcon icon={faAngleDown}/></button>
         </div>
       </div>
       <div className="progress-container">

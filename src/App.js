@@ -112,24 +112,32 @@ const App = () => {
     const index = modifiedData.findIndex(i => i.id === key)
     let newIndex = index 
 
-    if (direction === "up") {
-      newIndex--
-    } else {
-      newIndex++
-    }
+    direction === "up" ? newIndex-- : newIndex++
+    
     const movedData = arrayMove(modifiedData, index, newIndex)
     setData(movedData)
     setLastChange([index,"moved"])
   }
 
   const listProgresses = data.map((item, index = 0) => {
+    let position = ""
+
+    if (data.length === 1 ) {
+      position = "alone"
+    } else if (index === 0) {
+      position = "first"
+    } else if (index === data.length-1) {
+      position = "last"
+    }
+
     return(
       <ProgressBar  key={item.id} 
                     data={item} 
                     handleChange={handleLevel} 
                     editButton={startEdit} 
                     deleteButton={deleteEntry}
-                    moveButton={moveEntry}/>
+                    moveButton={moveEntry}
+                    position={position}/>
     )
   })
 
@@ -145,23 +153,17 @@ const App = () => {
     })
   }
 
-  const saveToLocalStorage = () => {
+  useEffect(() => {
     const storage = {
       data: data,
       index: dataIndex
     }
     localStorage.setItem("BattlePassTracker", JSON.stringify(storage))
-  }
-
-  useEffect(() => {
-    console.log(data)
-    console.log("useEffect triggered")
-    saveToLocalStorage()
-  }, [data,lastChange])
+  }, [data,dataIndex,lastChange])
 
   return (
       <div className="container">
-        <h1>Battlepass tracker</h1>
+        <h1>Battle Pass tracker</h1>
         {listProgresses}
         <div className="add-container">
          <button onClick={() => setModal(true)}>Add battlepass</button>

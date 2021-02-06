@@ -1,9 +1,8 @@
 import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleUp, faAngleDown, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faAngleUp, faAngleDown, faTrash, faEdit, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 
-const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton}) => {
-
+const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, position}) => {
   const [deleted, setDeleted] = useState(false)
 
   const [level, setLevel] = useState(data.level)
@@ -47,11 +46,41 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton})
     setDeleted(true)
   }
 
+  const changeButton = e => {
+    const id = data.id
+    const operation = e.currentTarget.getAttribute('data-operation')
+    let newLevel = level
+
+    operation === "plus" ? newLevel++ : newLevel--
+
+    setLevel(newLevel)
+    handleChange(id, newLevel)
+  }
+
   const prepareMove = e => {
     const id = data.id
     const direction = e.currentTarget.getAttribute('data-direction')
 
     moveButton(id, direction)
+  }
+
+  const moveButtons = () => {
+    const moveUp = <button data-direction="up" onClick={prepareMove} title="Move tracker up"><FontAwesomeIcon icon={faAngleUp}/></button>
+    const moveDown = <button data-direction="down" onClick={prepareMove} title="Move tracker down"><FontAwesomeIcon icon={faAngleDown}/></button>
+    if (position === "alone") {
+      return null
+    } else if (position === "first") {
+      return moveDown
+    } else if (position === "last") {
+      return moveUp
+    } else {
+      return(
+        <>
+          {moveUp}
+          {moveDown}
+        </>
+      )
+    }
   }
 
   if (deleted === true) return null
@@ -67,12 +96,11 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton})
                 />
         <h2>/{data.goal}</h2>
         <div className="buttons-container right">
-          <button onClick={prepareDelete}><FontAwesomeIcon icon={faTrash}/></button>
-          <button onClick={prepareEdit}><FontAwesomeIcon icon={faEdit}/></button>
+          <button onClick={prepareDelete} title="Delete tracker"><FontAwesomeIcon icon={faTrash}/></button>
+          <button onClick={prepareEdit} title="Edit tracker"><FontAwesomeIcon icon={faEdit}/></button>
         </div>
         <div className="buttons-container left">
-          <button data-direction="up" onClick={prepareMove}><FontAwesomeIcon icon={faAngleUp}/></button>
-          <button data-direction="down" onClick={prepareMove}><FontAwesomeIcon icon={faAngleDown}/></button>
+          {moveButtons()}
         </div>
       </div>
       <div className="progress-container">
@@ -81,6 +109,10 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton})
           <div className="progress-days" style={{left: daysPcnt+"%"}}>
             <span>{timeLeft} day(s)</span>
             <div className="measure"></div>
+          </div>
+          <div className="progress-buttons">
+            <button data-operation="minus" onClick={changeButton} title="Decrement"><FontAwesomeIcon icon={faMinus}/></button>
+            <button data-operation="plus" onClick={changeButton} title="Increment"><FontAwesomeIcon icon={faPlus}/></button>
           </div>
           <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : levelPcnt === 100 ? "finished" : ""}`} style={{width: levelPcnt+"%"}}></div>
         </div>

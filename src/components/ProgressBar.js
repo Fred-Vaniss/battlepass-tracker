@@ -13,10 +13,16 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
     end: new Date(data.end)
   }
 
-  let timeLeft = Math.ceil((dates.end - dates.current) / (1000 * 3600 * 24))
-  let timeElapsed = Math.ceil((dates.current - dates.start) / (1000 * 3600 * 24))
-  let passDuration = Math.ceil((dates.end - dates.start) / (1000 * 3600 * 24))
+  let timeLeft = Math.floor((dates.end - dates.current) / (1000 * 3600 * 24))
+  let timeElapsed = Math.floor((dates.current - dates.start) / (1000 * 3600 * 24))
+  let passDuration = Math.floor((dates.end - dates.start) / (1000 * 3600 * 24))
   let passGoal = data.goal
+
+  let early = 0
+
+  if (dates.current < dates.start) {
+    early = Math.ceil((dates.start - dates.current) / (1000 * 3600 * 24))
+  }
 
   const clamp = (num, min, max) => {
     return num <= min ? min : num >= max ? max : num;
@@ -64,7 +70,43 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
     moveButton(id, direction)
   }
 
-  const moveButtons = () => {
+  const ProgressContent = () => {
+
+    if (dates.start > dates.end) {
+      return <div className="progress-notice"><p>ERROR: The start date is higher than end date.</p></div>
+    }
+
+    if (Number.isNaN(dates.start/1000) || Number.isNaN(dates.end/1000)){
+      return <div className="progress-notice"><p>ERROR: The entered date is invalid.</p></div>
+    }
+
+    if (passGoal <= 0) {
+      return <div className="progress-notice"><p>ERROR: The defined goal is invalid.</p></div>
+    }
+
+    if (early === 0 && timeLeft >= 0) {
+      return(
+        <>
+          <div className="progress-days" style={{left: daysPcnt+"%"}}>
+            <span>{timeLeft} day(s)</span>
+            <div className="measure"></div>
+          </div>
+          <div className="progress-buttons">
+            <button data-operation="minus" onClick={changeButton} title="Decrement"><FontAwesomeIcon icon={faMinus}/></button>
+            <button data-operation="plus" onClick={changeButton} title="Increment"><FontAwesomeIcon icon={faPlus}/></button>
+          </div>
+        </>
+      )
+    } else if (early >= 1) {
+      return <div className="progress-notice"><p>This event start in {early} day(s)</p></div>
+    } else if (timeLeft < 0) {
+      return <div className="progress-notice"><p>This event ended {-timeLeft} day(s) ago</p></div>
+    } else {
+      return <div className="progress-notice"><p>An unknown error has occured</p></div>
+    }
+  }
+
+  const MoveButtons = () => {
     const moveUp = <button data-direction="up" onClick={prepareMove} title="Move tracker up"><FontAwesomeIcon icon={faAngleUp}/></button>
     const moveDown = <button data-direction="down" onClick={prepareMove} title="Move tracker down"><FontAwesomeIcon icon={faAngleDown}/></button>
     if (position === "alone") {
@@ -92,7 +134,8 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
         <input  type="number"
                 name="level"
                 value={level}
-                onChange={changeLevel}
+                onChange={changeLevel} 
+                style={{width: 18 * passGoal.toString().length}}
                 />
         <h2>/{data.goal}</h2>
         <div className="buttons-container right">
@@ -100,21 +143,14 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
           <button onClick={prepareEdit} title="Edit tracker"><FontAwesomeIcon icon={faEdit}/></button>
         </div>
         <div className="buttons-container left">
-          {moveButtons()}
+          <MoveButtons/>
         </div>
       </div>
       <div className="progress-container">
         <span className="dates left">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
         <div className="progress bg">
-          <div className="progress-days" style={{left: daysPcnt+"%"}}>
-            <span>{timeLeft} day(s)</span>
-            <div className="measure"></div>
-          </div>
-          <div className="progress-buttons">
-            <button data-operation="minus" onClick={changeButton} title="Decrement"><FontAwesomeIcon icon={faMinus}/></button>
-            <button data-operation="plus" onClick={changeButton} title="Increment"><FontAwesomeIcon icon={faPlus}/></button>
-          </div>
-          <div className={`progress bar ${levelPcnt < daysPcnt ? "late" : levelPcnt === 100 ? "finished" : ""}`} style={{width: levelPcnt+"%"}}></div>
+          <ProgressContent/>
+          <div className={`progress bar${levelPcnt < daysPcnt ? " late" : levelPcnt === 100 ? " finished" : ""}`} style={{width: levelPcnt+"%"}}></div>
         </div>
         <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
       </div>

@@ -142,7 +142,7 @@ input{
   &.bar{
     background: rgb(25,199,18);
     background: linear-gradient(0deg, #034600 0%, #08b702 100%);
-    width: 50%;
+    width: 0%;
     &.late{
       background: rgb(199,18,18);
       background: linear-gradient(0deg, #500000 0%, #dc0000 100%);
@@ -194,6 +194,15 @@ input{
     background-color: #fff;
     box-shadow: 0 0 12px #000 , 0 0 6px #000, 0 0 3px #000;
   }
+}
+
+.progress-notice{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:100%;
+  width: 100%;
+  position:absolute;
 }
 
 .add-container{

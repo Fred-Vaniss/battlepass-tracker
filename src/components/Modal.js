@@ -18,9 +18,15 @@ const Modal = ({mode, form, handleChange, open, onClose, onSave, children}) => {
 
 						<label htmlFor="end">End date</label>
 						<input type="date" name="end" value={form.end} onChange={handleChange}/>
+
+						<label htmlFor="time">Time</label>
+						<input type="time" name="time" value={form.time} onChange={handleChange}/>
 						
 						<label htmlFor="goal">Level goal</label>
 						<input type="number" name="goal" value={form.goal} onChange={handleChange}/>
+
+						<label htmlFor="increment">Increment amount</label>
+						<input type="number" name="increment" value={form.increment} onChange={handleChange}/>
 					</div>
 
 					<div className="modal-buttons-container">	

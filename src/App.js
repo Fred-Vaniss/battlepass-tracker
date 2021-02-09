@@ -24,8 +24,10 @@ const App = () => {
     name: "",
     start: "",
     end: "",
+    time: "",
     goal: 0,
-    level: "0"
+    level: "0",
+    increment: "1"
   });
   const [isEditing,setIsEditing] = useState(false);
   const [modal,setModal] = useState(false);
@@ -63,8 +65,10 @@ const App = () => {
       name: "",
       start: "",
       end: "",
+      time: "",
       goal: 0,
-      level: "0"
+      level: "0",
+      increment: 1
     })
     setModal(false)
   }
@@ -79,8 +83,10 @@ const App = () => {
       name: editing.name,
       start: editing.start,
       end: editing.end,
+      time: editing.time,
       goal: editing.goal,
-      level: editing.level
+      level: editing.level,
+      increment: editing.increment
     })
 
     setModal(true)
@@ -148,8 +154,10 @@ const App = () => {
       name: "",
       start: "",
       end: "",
+      time: "",
       goal: 0,
-      level: "0"
+      level: "0",
+      increment: 1
     })
   }
 

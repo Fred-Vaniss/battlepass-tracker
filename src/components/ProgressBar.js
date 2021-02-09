@@ -4,24 +4,26 @@ import { faAngleUp, faAngleDown, faTrash, faEdit, faPlus, faMinus } from '@forta
 
 const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, position}) => {
   const [deleted, setDeleted] = useState(false)
-
   const [level, setLevel] = useState(data.level)
 
+  const time = data.time || "00:00"
+
   const dates = {
-    start: new Date(data.start),
+    start: new Date(`${data.start}T${time}`),
     current: new Date(),
-    end: new Date(data.end)
+    end: new Date(`${data.end}T${time}`)
   }
-
-  let timeLeft = Math.floor((dates.end - dates.current) / (1000 * 3600 * 24))
-  let timeElapsed = Math.floor((dates.current - dates.start) / (1000 * 3600 * 24))
-  let passDuration = Math.floor((dates.end - dates.start) / (1000 * 3600 * 24))
+  
+  let daysLeft = Math.floor((dates.end - dates.current) / (1000 * 3600 * 24))
+  let hoursLeft = Math.floor((dates.end - dates.current) / (1000*60*60))
+  let timeElapsed = Math.floor((dates.current - dates.start))
+  let passDuration = Math.floor((dates.end - dates.start))
   let passGoal = data.goal
-
+  
   let early = 0
 
   if (dates.current < dates.start) {
-    early = Math.ceil((dates.start - dates.current) / (1000 * 3600 * 24))
+    early = (dates.start - dates.current)
   }
 
   const clamp = (num, min, max) => {
@@ -55,9 +57,10 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
   const changeButton = e => {
     const id = data.id
     const operation = e.currentTarget.getAttribute('data-operation')
-    let newLevel = level
+    let newLevel = parseInt(level)
+    const increment = parseInt(data.increment) || 1
 
-    operation === "plus" ? newLevel++ : newLevel--
+    operation === "plus" ? newLevel=newLevel+increment : newLevel=newLevel-increment
 
     setLevel(newLevel)
     handleChange(id, newLevel)
@@ -84,11 +87,13 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
       return <div className="progress-notice"><p>ERROR: The defined goal is invalid.</p></div>
     }
 
-    if (early === 0 && timeLeft >= 0) {
+    if (early === 0 && daysLeft >= 0) {
+      const timeLeft = hoursLeft >= 24 ? <span>{daysLeft} day(s)</span> : <span>{hoursLeft} hours(s)</span>
+
       return(
         <>
           <div className="progress-days" style={{left: daysPcnt+"%"}}>
-            <span>{timeLeft} day(s)</span>
+            {timeLeft}
             <div className="measure"></div>
           </div>
           <div className="progress-buttons">
@@ -98,9 +103,14 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
         </>
       )
     } else if (early >= 1) {
-      return <div className="progress-notice"><p>This event start in {early} day(s)</p></div>
-    } else if (timeLeft < 0) {
-      return <div className="progress-notice"><p>This event ended {-timeLeft} day(s) ago</p></div>
+      const daysEarly = Math.floor(early / (1000 * 3600 * 24))
+      const hoursEarly = Math.floor(early / (1000 * 60 * 60))
+      const earlyMessage = hoursEarly <= 24 ? <p>This event start in {hoursEarly} hours(s)</p> : <p>This event start in {daysEarly} day(s)</p>
+
+      return <div className="progress-notice">{earlyMessage}</div>
+    } else if (daysLeft < 0) {
+      const timeElapsed = hoursLeft >= -24 ? <p>This event ended {-hoursLeft-1} hours(s) ago</p> : <p>This event ended {-daysLeft-1} days(s) ago</p>
+      return <div className="progress-notice">{timeElapsed}</div>
     } else {
       return <div className="progress-notice"><p>An unknown error has occured</p></div>
     }
@@ -135,7 +145,7 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
                 name="level"
                 value={level}
                 onChange={changeLevel} 
-                style={{width: 18 * passGoal.toString().length}}
+                style={{width: 0.60 * passGoal.toString().length + "em"}}
                 />
         <h2>/{data.goal}</h2>
         <div className="buttons-container right">

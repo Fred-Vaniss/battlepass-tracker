@@ -1,0 +1,21 @@
+@media screen and (max-width: 600px) {
+	h1 {
+		font-size: 2em;
+	}
+
+	h2, .level-form input{
+		font-size: 1.2em;
+	}
+
+	.progress-container .dates{
+		display: none;
+	}
+
+	.progress.bg{
+		width: 70%;
+	}
+
+	.buttons-container{
+		top: 60%;
+	}
+}

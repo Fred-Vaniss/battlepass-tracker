@@ -143,6 +143,7 @@ input{
     background: rgb(25,199,18);
     background: linear-gradient(0deg, #034600 0%, #08b702 100%);
     width: 0%;
+    transition: width .5s;
     &.late{
       background: rgb(199,18,18);
       background: linear-gradient(0deg, #500000 0%, #dc0000 100%);

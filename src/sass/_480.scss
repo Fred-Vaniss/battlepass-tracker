@@ -1,3 +1,13 @@
-@media screen and (max-width: 600px) {
-	
+@media screen and (max-width: 480px) {
+	.level-form{
+		margin-bottom: 25px;	
+	} 
+
+	.buttons-container{
+		top: 140%;
+	}
+
+	.progress.bg{
+		width: 60%;
+	}
 }

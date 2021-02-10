@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Flipped } from 'react-flip-toolkit'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp, faAngleDown, faTrash, faEdit, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faClock } from '@fortawesome/free-regular-svg-icons'
 
 const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, position}) => {
   const [deleted, setDeleted] = useState(false)
@@ -89,11 +90,12 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
     }
 
     if (early === 0 && daysLeft >= 0) {
-      const timeLeft = hoursLeft >= 24 ? <span>{daysLeft} day(s)</span> : <span>{hoursLeft} hours(s)</span>
+      const timeLeft = hoursLeft >= 24 ? <span className="time-digits">{daysLeft} day(s)</span> : <span className="time-digits">{hoursLeft} hour(s)</span>
 
       return(
         <>
           <div className="progress-days" style={{left: daysPcnt+"%"}}>
+            <span className="time-icon"><FontAwesomeIcon icon={faClock}/></span>
             {timeLeft}
             <div className="measure"></div>
           </div>

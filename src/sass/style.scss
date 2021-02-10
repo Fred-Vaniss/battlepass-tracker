@@ -175,8 +175,19 @@ input{
     }
   }
 }
-.progress:hover .progress-buttons{
-  visibility: visible;
+.progress:hover {
+  .progress-buttons{
+    visibility: visible;
+  }
+}
+
+.tracker:hover{
+  .time-digits{
+    display: inline;
+  }
+  .time-icon{
+    display: none;
+  }
 }
 
 .progress-days{
@@ -188,6 +199,9 @@ input{
   width: 80px;
   span{
     margin-bottom: 10px;
+  }
+  .time-digits{
+    display: none;
   }
   .measure{
     height:40px;

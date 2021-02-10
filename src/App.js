@@ -172,7 +172,7 @@ const App = () => {
 
   return (
       <div className="container">
-        <h1>Battle Pass tracker</h1>
+        <h1>Timed Progress tracker</h1>
         <Flipper flipKey={lastChange} spring="stiff">
           {listProgresses}
         </Flipper>

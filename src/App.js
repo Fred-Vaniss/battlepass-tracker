@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import ProgressBar from './components/ProgressBar';
 import Modal from './components/Modal';
+import { Flipper } from 'react-flip-toolkit'
 // import { arrayMove } from 'array-move'
 
 const App = () => {
@@ -172,7 +173,9 @@ const App = () => {
   return (
       <div className="container">
         <h1>Battle Pass tracker</h1>
-        {listProgresses}
+        <Flipper flipKey={lastChange} spring="stiff">
+          {listProgresses}
+        </Flipper>
         <div className="add-container">
          <button onClick={() => setModal(true)}>Add battlepass</button>
         </div>

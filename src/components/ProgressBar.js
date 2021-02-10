@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { Flipped } from 'react-flip-toolkit'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp, faAngleDown, faTrash, faEdit, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 
@@ -138,33 +139,35 @@ const ProgressBar = ({data, handleChange, editButton, deleteButton, moveButton, 
   if (deleted === true) return null
 
   return (
-    <div className="tracker">
-      <div className="level-form">
-        <h2>{data.name}: </h2>
-        <input  type="number"
-                name="level"
-                value={level}
-                onChange={changeLevel} 
-                style={{width: 0.60 * passGoal.toString().length + "em"}}
-                />
-        <h2>/{data.goal}</h2>
-        <div className="buttons-container right">
-          <button onClick={prepareDelete} title="Delete tracker"><FontAwesomeIcon icon={faTrash}/></button>
-          <button onClick={prepareEdit} title="Edit tracker"><FontAwesomeIcon icon={faEdit}/></button>
+    <Flipped flipId={data.id}>
+      <div className="tracker">
+        <div className="level-form">
+          <h2>{data.name}: </h2>
+          <input  type="number"
+                  name="level"
+                  value={level}
+                  onChange={changeLevel} 
+                  style={{width: 0.60 * passGoal.toString().length + "em"}}
+                  />
+          <h2>/{data.goal}</h2>
+          <div className="buttons-container right">
+            <button onClick={prepareDelete} title="Delete tracker"><FontAwesomeIcon icon={faTrash}/></button>
+            <button onClick={prepareEdit} title="Edit tracker"><FontAwesomeIcon icon={faEdit}/></button>
+          </div>
+          <div className="buttons-container left">
+            <MoveButtons/>
+          </div>
         </div>
-        <div className="buttons-container left">
-          <MoveButtons/>
+        <div className="progress-container">
+          <span className="dates left">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
+          <div className="progress bg">
+            <ProgressContent/>
+            <div className={`progress bar${levelPcnt < daysPcnt ? " late" : levelPcnt === 100 ? " finished" : ""}`} style={{width: levelPcnt+"%"}}></div>
+          </div>
+          <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
         </div>
       </div>
-      <div className="progress-container">
-        <span className="dates left">{dates.start.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
-        <div className="progress bg">
-          <ProgressContent/>
-          <div className={`progress bar${levelPcnt < daysPcnt ? " late" : levelPcnt === 100 ? " finished" : ""}`} style={{width: levelPcnt+"%"}}></div>
-        </div>
-        <span className="dates">{dates.end.toLocaleString('default', {day:"numeric", month: 'long'})}</span>
-      </div>
-    </div>
+    </Flipped>
   )
 }
 
